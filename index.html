@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Visa Verification System</title>
+
+<style>
+body { font-family: Arial; background:#eef2f7; margin:0; }
+
+/* HEADER */
+header {
+    background:#0b3d91;
+    color:white;
+    padding:15px 30px;
+    font-size:18px;
+}
+
+/* BOX */
+.container {
+    max-width:900px;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:8px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* INPUT */
+input {
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+/* BUTTON */
+button {
+    background:#0b3d91;
+    color:white;
+    padding:12px;
+    border:none;
+    border-radius:5px;
+    width:100%;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* STATUS */
+.status {
+    text-align:center;
+    margin:20px 0;
+    font-size:18px;
+}
+
+.success { color:green; font-weight:bold; }
+.error { color:red; font-weight:bold; }
+
+/* DATA */
+.grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.item {
+    background:#f9fafc;
+    padding:10px;
+    border-radius:5px;
+}
+
+.label { font-size:12px; color:#666; }
+.value { font-weight:bold; }
+
+.photo {
+    position:absolute;
+    right:20px;
+    top:20px;
+}
+
+.photo img {
+    width:100px;
+    height:120px;
+    border-radius:5px;
+    border:2px solid #ccc;
+}
+
+.result-box {
+    position:relative;
+    margin-top:20px;
+}
+
+@media(max-width:700px){
+    .grid { grid-template-columns:1fr; }
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+E-Visa Verification System (Demo)
+</header>
+
+<div class="container">
+
+<h2>Check Your Visa</h2>
+
+<input type="text" id="appId" placeholder="Enter Application ID">
+<input type="text" id="code" placeholder="Enter Verification Code">
+
+<button onclick="checkVisa()">Verify Visa</button>
+
+<div id="status" class="status"></div>
+
+<div id="result" class="result-box"></div>
+
+</div>
+
+<script>
+
+/* DATABASE */
+const visas = [
+{
+    applicationId: "60912-42144-49935",
+    code: "a15a1170-1566-4418-9d3c-Ja56413",
+
+    surname: "MUHAMMAD",
+    name: "KHAN",
+    dob: "01/01/1991",
+    gender: "MALE",
+    nationality: "PAKISTANI",
+    passport: "LM0154192",
+
+    visaId: "DGT303156",
+    validity: "23/04/2026 - 22/07/2026",
+    stay: "90 Days",
+    entries: "Single Entry",
+    approval: "24/04/2026",
+
+    photo: "https://via.placeholder.com/100x120"
+}
+];
+
+/* FUNCTION */
+function checkVisa() {
+
+    const appId = document.getElementById("appId").value.trim();
+    const code = document.getElementById("code").value.trim();
+
+    const resultDiv = document.getElementById("result");
+    const statusDiv = document.getElementById("status");
+
+    const visa = visas.find(v => v.applicationId === appId && v.code === code);
+
+    if(visa){
+
+        statusDiv.innerHTML = "<span class='success'>✔ VISA APPROVED</span>";
+
+        resultDiv.innerHTML = `
+        <div class="photo">
+            <img src="${visa.photo}">
+        </div>
+
+        <h3>Applicant Information</h3>
+        <div class="grid">
+            <div class="item"><div class="label">Surname</div><div class="value">${visa.surname}</div></div>
+            <div class="item"><div class="label">Name</div><div class="value">${visa.name}</div></div>
+            <div class="item"><div class="label">DOB</div><div class="value">${visa.dob}</div></div>
+            <div class="item"><div class="label">Gender</div><div class="value">${visa.gender}</div></div>
+            <div class="item"><div class="label">Nationality</div><div class="value">${visa.nationality}</div></div>
+            <div class="item"><div class="label">Passport</div><div class="value">${visa.passport}</div></div>
+        </div>
+
+        <h3>Visa Details</h3>
+        <div class="grid">
+            <div class="item"><div class="label">Visa ID</div><div class="value">${visa.visaId}</div></div>
+            <div class="item"><div class="label">Validity</div><div class="value">${visa.validity}</div></div>
+            <div class="item"><div class="label">Stay</div><div class="value">${visa.stay}</div></div>
+            <div class="item"><div class="label">Entries</div><div class="value">${visa.entries}</div></div>
+            <div class="item"><div class="label">Approval</div><div class="value">${visa.approval}</div></div>
+        </div>
+        `;
+
+    } else {
+
+        statusDiv.innerHTML = "<span class='error'>❌ No Record Found</span>";
+        resultDiv.innerHTML = "";
+
+    }
+}
+
+</script>
+
+</body>
+</html>
